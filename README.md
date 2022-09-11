@@ -28,13 +28,15 @@ spaces (or more) to signify an indentation change.
 e.g. Here is an example of a BAD indent level change. Notice how there
 is ONLY a 1 space indentation change from the 'then' line to the
 'perform do-something' line.
----bad indent level example---
+
+Bad indent level example:
+---
     if flag-1 = 'Z'
     then
      perform do-something
      perform something-else
     end-if
-    -----
+-----
 
 DETAILS:
 
@@ -42,10 +44,10 @@ In the 'procedure division' section, converts the COBOL source code to
 use the more robust style, which is to use a single solitary '.' at the end
 of each paragraph (procedure).
 
-    - strips out trailing '.' from every sentence/statement that occurs
-        within the procedure division.
-    - inserts a solitary '.' at the end of each paragraph/procedure,
-        if one is not already there.
+* strips out trailing '.' from every sentence/statement that occurs
+    within the procedure division.
+* inserts a solitary '.' at the end of each paragraph/procedure,
+    if one is not already there.
 
 Heuristically inserts code block terminators ((e.g. end-if, end-call,
 end-evaluate, et al.), if needed, by examing the indent levels of each
@@ -56,21 +58,21 @@ If you run this script that already uses code blocks terminators and a
 single solitary '.' at the end of each procedure paragraph, you will
 likely see few/no changes in the resulting generated output file.
 
-    - inserts the following code block terminators, as needed:
-        + end-if
+Inserts the following code block terminators, as needed:
++ end-if
 
-        + end-evaluate
-        + end-start
-        + end-search
++ end-evaluate
++ end-start
++ end-search
 
-        + end-call
-        + end-read
-        + end-write
-        + end-rewrite
++ end-call
++ end-read
++ end-write
++ end-rewrite
 
-        + end-compute
-        + end-string
-        + end-unstring
++ end-compute
++ end-string
++ end-unstring
 
 Note that, in general, block terminators will only be added if they
 are not already present and the associated start token (e.g. 'call',
@@ -87,21 +89,26 @@ NO substatements under it.
 Annotates code block terminators (e.g. end-if, 'end-search', 'end-start'),
 by appending the text of the correlated 'start' statement as a comment.
 e.g.
----before--
-main-proc.
-    if flag-1 = 'N'
-        display 'foobar'
-    <more statements go here>
-    stop run.
----after--
-main-proc.
-    if flag-1 = 'N'
-        display 'foobar'
-    end-if *> flag-1 = 'N'
-    <more statements go here>
-    stop run
-. *> end main-proc
------------
+
+Before:
+---
+    main-proc.
+        if flag-1 = 'N'
+            display 'foobar'
+        <more statements go here>
+        stop run.
+
+After:
+---
+    main-proc.
+        if flag-1 = 'N'
+            display 'foobar'
+        end-if *> flag-1 = 'N'
+        <more statements go here>
+        stop run
+    . *> end main-proc
+----------
+
 - [annotations can be disabled via the --suppress-annotations flag ]
 - note that if an existing terminator already has a non-zero length
     comment next to it, this program will NOT attempt to add an
@@ -110,43 +117,49 @@ main-proc.
 
 Optionally, transforms code to all uppercase or all lowercase, leaving
 quoted strings untouched.
-    --lowercase
-    --uppercase
+* --lowercase
+* --uppercase
 
 Other cosmetic aesthetics:
-    --clear-right-margin
-        blanks out right margin (cols >= 73)
+* --clear-right-margin
+    + blanks out right margin (cols >= 73)
 
-    --clear-left-margin
-        blanks out left margin (cols 1 through 6, inclusive)
+* --clear-left-margin
+    + blanks out left margin (cols 1 through 6, inclusive)
 
-    --clear-empty-asterisk-comments
-        if line has only a single asterisk, at column 7, will convert it
-        to a blank line, to help reduce the appearance of 'clutter'.
+* --clear-empty-asterisk-comments
+    + if line has only a single asterisk, at column 7, will convert it
+    to a blank line, to help reduce the appearance of 'clutter'.
 
 ---
 
 Code block terminators insertion example:
+
+Before:
 ---
-if foobar
-    if foobar2
-        if foobar3
-            perform proc-3
-        else
-            perform proc-4
-perform proc-2
+    if foobar
+        if foobar2
+            if foobar3
+                perform proc-3
+            else
+                perform proc-4
+    perform proc-2
+
+
+is transformed into
+
+After:
 ---
-is transformed into:
-if foobar
-    if foobar2
-        if foobar3
-            perform proc-3
-        else
-            perform proc-4
-        end-if *> foobar3
-    end-if *> foobar2
-end-if *> foobar
-perform proc-2
+    if foobar
+        if foobar2
+            if foobar3
+                perform proc-3
+            else
+                perform proc-4
+            end-if *> foobar3
+        end-if *> foobar2
+    end-if *> foobar
+    perform proc-2
 ----
 Note that the program was able to figure out, where to insert the end-if's
 based on examining the indentation levels of the original code.
@@ -154,31 +167,35 @@ based on examining the indentation levels of the original code.
 Also note that linear nested if statements are supported.
 
 Terminators insertion example, for linear nested if's:
+
+Before:
 ----
-if foobar
-    dosomething-0
-else if foobar2
-    dosomething
-else if foobar3
-    dosomething-2
-else if foobar4
-    dosomething-3
-perform proc-7
+    if foobar
+        dosomething-0
+    else if foobar2
+        dosomething
+    else if foobar3
+        dosomething-2
+    else if foobar4
+        dosomething-3
+    perform proc-7
+
+After:
 ----
-is transformed into:
-if foobar
-    dosomething-0
-else if foobar2
-    dosomething
-else if foobar3
-    dosomething-2
-else if foobar4
-    dosomething-3
-end-if *> foobar4
-end-if *> foobar3
-end-if *> foobar2
-end-if *> foobar
-perform proc-7
+    is transformed into:
+    if foobar
+        dosomething-0
+    else if foobar2
+        dosomething
+    else if foobar3
+        dosomething-2
+    else if foobar4
+        dosomething-3
+    end-if *> foobar4
+    end-if *> foobar3
+    end-if *> foobar2
+    end-if *> foobar
+    perform proc-7
 ---
 
 IDEAL USE CASE:
@@ -189,44 +206,44 @@ with it, to verify continued correct operation of the code.
 
 USAGE EXAMPLES:
 
-# removes trailing dots, from each statement in procedure division.
-# inserts and annotates code block terminators.
-# places 'cleaned' cobol source file into tests/test-set-1-new.cbl
-./clean-cobol.py tests/test-set-1.cbl
+    # removes trailing dots, from each statement in procedure division.
+    # inserts and annotates code block terminators.
+    # places 'cleaned' cobol source file into tests/test-set-1-new.cbl
+    ./clean-cobol.py tests/test-set-1.cbl
 
-# removes trailing dots, from each statement in procedure division.
-# inserts and annotates code block terminators.
-# plus, converts everything, except comments and quoted strings, to lowercase.
-# places 'cleaned' cobol source file into tests/test-set-1-new.cbl
-./clean-cobol.py --lowercase tests/test-set-1.cbl
+    # removes trailing dots, from each statement in procedure division.
+    # inserts and annotates code block terminators.
+    # plus, converts everything, except comments and quoted strings, to lowercase.
+    # places 'cleaned' cobol source file into tests/test-set-1-new.cbl
+    ./clean-cobol.py --lowercase tests/test-set-1.cbl
 
-# removes trailing dots, from each statement in procedure division.
-# inserts and annotates code block terminators.
-# plus, clears left and right margins, clears empty asterisk comments.
-# places 'cleaned' cobol source file into ./test-set-1-cleaned.cbl
-./clean-cobol.py --clear-all tests/test-set-1.cbl -o test-set-1-cleaned.cbl
+    # removes trailing dots, from each statement in procedure division.
+    # inserts and annotates code block terminators.
+    # plus, clears left and right margins, clears empty asterisk comments.
+    # places 'cleaned' cobol source file into ./test-set-1-cleaned.cbl
+    ./clean-cobol.py --clear-all tests/test-set-1.cbl -o test-set-1-cleaned.cbl
 
 ----
 
-positional arguments:
-  filename              name of the cobol source file
+    positional arguments:
+    filename              name of the cobol source file
 
-options:
-  -h, --help            show this help message and exit
-  -l, --lowercase       convert to all lowercase
-  -u, --uppercase       convert to all uppercase.
-  -cl, --clear-left-margin
-                        blank out left margin (cols 1-6, inclusive)
-  -cr, --clear-right-margin
-                        blank out right margin (cols >= 73)
-  -cs, --clear-empty-asterisk-comments
-                        blank out empty asterisk comment lines
-  -ca, --clear-all      blank out left and right margins and blank out empty
-                        asterisk comment lines
-  -A, --suppress-annotations
-                        suppress annotation of terminators
-  -b, --batch-mode      suppress printing of final line indicating the output file
-                        that the changes were written to
-  -d, --debug           enable verbose debugging output
-  -o OUTPUT_FILENAME, --output-filename OUTPUT_FILENAME
-                        output to specified filename
+    options:
+    -h, --help            show this help message and exit
+    -l, --lowercase       convert to all lowercase
+    -u, --uppercase       convert to all uppercase.
+    -cl, --clear-left-margin
+                            blank out left margin (cols 1-6, inclusive)
+    -cr, --clear-right-margin
+                            blank out right margin (cols >= 73)
+    -cs, --clear-empty-asterisk-comments
+                            blank out empty asterisk comment lines
+    -ca, --clear-all      blank out left and right margins and blank out empty
+                            asterisk comment lines
+    -A, --suppress-annotations
+                            suppress annotation of terminators
+    -b, --batch-mode      suppress printing of final line indicating the output file
+                            that the changes were written to
+    -d, --debug           enable verbose debugging output
+    -o OUTPUT_FILENAME, --output-filename OUTPUT_FILENAME
+                            output to specified filename
