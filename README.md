@@ -1,3 +1,8 @@
+Utilities:
+clean-cobol.py (and verify-results.sh, a test driver for clean-cobol.py)
+
+MIT License
+Copyright (c) 2022 UChin Kim
 
 SUMMARY:
 
