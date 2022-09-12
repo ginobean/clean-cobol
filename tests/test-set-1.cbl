@@ -49,7 +49,7 @@
 005600     call 'process-command-args' using PARAM-GROUP                AST
 005700         ON EXCEPTION                                             AST
 005800             DISPLAY 'the SUBROUTINE CALL TO process-command-args AST
-005900-                ' FAILED!'                                       AST
+005900-                ' FAILED!'.                                      AST
 006000                                                                  AST
 006100     perform do-stuff.                                            AST
 006200     perform do-stuff-2.                                          AST
