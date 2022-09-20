@@ -1,10 +1,11 @@
-Utilities:
+# Utilities
+
 clean-cobol.py (and verify-results.sh, a test driver for clean-cobol.py)
 
 MIT License
 Copyright (c) 2022 UChin Kim
 
-## SUMMARY:
+## SUMMARY
 
 To make it easier to maintain an existing COBOL code base going forwards,
 which uses the older style of terminating most statements with a '.',
@@ -20,7 +21,7 @@ In addition, this script will also annotate select code block terminators,
 such as 'end-if', 'end-search', 'end-start', etc. to make it easier to
 visually identify the extents of each code block.
 
-## CAVEATS:
+## CAVEATS
 
 Note that your indent levels MUST BE ACCURATE, +/- a fudge factor
 of 1 space. This program determines the correct insertion points,
@@ -34,8 +35,9 @@ e.g. Here is an example of a BAD indent level change. Notice how there
 is ONLY a 1 space indentation change from the 'then' line to the
 'perform do-something' line.
 
-Bad indent level example:
----
+### Bad indent level example
+
+-----
     if flag-1 = 'Z'
     then
      perform do-something
@@ -73,8 +75,7 @@ But, of course, be sure to do regression testing on the code, both
 before and after you run *clean-cobol.py*, to ensure that NO issues were
 introduced during the cleaning/filtering process.
 
-
-## DETAILS:
+## DETAILS
 
 In the 'procedure division' section, converts the COBOL source code to
 use the more robust style, which is to use a single solitary '.' at the end
@@ -95,20 +96,21 @@ single solitary '.' at the end of each procedure paragraph, you will
 likely see few/no changes in the resulting generated output file.
 
 Inserts the following code block terminators, as needed:
-+ end-if
 
-+ end-evaluate
-+ end-start
-+ end-search
+* end-if
 
-+ end-call
-+ end-read
-+ end-write
-+ end-rewrite
+* end-evaluate
+* end-start
+* end-search
 
-+ end-compute
-+ end-string
-+ end-unstring
+* end-call
+* end-read
+* end-write
+* end-rewrite
+
+* end-compute
+* end-string
+* end-unstring
 
 Note that, in general, block terminators will only be added if they
 are not already present and the associated start token (e.g. 'call',
@@ -126,16 +128,16 @@ Annotates code block terminators (e.g. end-if, 'end-search', 'end-start'),
 by appending the text of the correlated 'start' statement as a comment.
 e.g.
 
-Before:
----
+-----
     main-proc.
         if flag-1 = 'N'
             display 'foobar'
         <more statements go here>
         stop run.
 
-After:
----
+is transformed into:
+
+-----
     main-proc.
         if flag-1 = 'N'
             display 'foobar'
@@ -143,36 +145,38 @@ After:
         <more statements go here>
         stop run
     . *> end main-proc
-----------
+-----
 
-- [annotations can be disabled via the --suppress-annotations flag ]
-- note that if an existing terminator already has a non-zero length
-    comment next to it, this program will NOT attempt to add an
-    annotation to it.
----
+* [annotations can be disabled via the --suppress-annotations flag ]
+* note that if an existing terminator already has a non-zero length
+comment next to it, this program will NOT attempt to add an
+annotation to it.
+
+-----
 
 Optionally, transforms code to all uppercase or all lowercase, leaving
 quoted strings untouched.
+
 * --lowercase
 * --uppercase
 
 Other cosmetic aesthetics:
+
 * --clear-right-margin
-    + blanks out right margin (cols >= 73)
+  * blanks out right margin (cols >= 73)
 
 * --clear-left-margin
-    + blanks out left margin (cols 1 through 6, inclusive)
+  * blanks out left margin (cols 1 through 6, inclusive)
 
 * --clear-empty-asterisk-comments
-    + if line has only a single asterisk, at column 7, will convert it
-    to a blank line, to help reduce the appearance of 'clutter'.
+  * if line has only a single asterisk, at column 7, will convert it
+to a blank line, to help reduce the appearance of 'clutter'.
 
----
+-----
 
 Code block terminators insertion example:
 
-Before:
----
+-----
     if foobar
         if foobar2
             if foobar3
@@ -181,11 +185,9 @@ Before:
                 perform proc-4
     perform proc-2
 
-
 is transformed into
 
-After:
----
+-----
     if foobar
         if foobar2
             if foobar3
@@ -196,7 +198,9 @@ After:
         end-if *> foobar2
     end-if *> foobar
     perform proc-2
-----
+
+-----
+
 Note that the program was able to figure out, where to insert the end-if's
 based on examining the indentation levels of the original code.
 
@@ -204,8 +208,7 @@ Also note that linear nested if statements are supported.
 
 Terminators insertion example, for linear nested if's:
 
-Before:
-----
+-----
     if foobar
         dosomething-0
     else if foobar2
@@ -216,9 +219,9 @@ Before:
         dosomething-3
     perform proc-7
 
-After:
-----
-    is transformed into:
+is transformed into:
+
+-----
     if foobar
         dosomething-0
     else if foobar2
@@ -232,9 +235,9 @@ After:
     end-if *> foobar2
     end-if *> foobar
     perform proc-7
----
+-----
 
-## IDEAL USE CASE:
+## IDEAL USE CASE
 
 The ideal use case for this script, is when you are looking to maintain a
 COBOL code base which already has a regression test suite associated
@@ -244,7 +247,7 @@ Once you've verified correctness, via regression testing, the resulting code,
 cleaned/filtered by *clean-cobol.py* should be notably easier to maintain
 going forwards.
 
-### USAGE EXAMPLES:
+### USAGE EXAMPLES
 
     # removes trailing dots, from each statement in procedure division.
     # inserts and annotates code block terminators.
@@ -263,7 +266,7 @@ going forwards.
     # places 'cleaned' cobol source file into ./test-set-1-cleaned.cbl
     ./clean-cobol.py --clear-all tests/test-set-1.cbl -o test-set-1-cleaned.cbl
 
-----
+-----
 
     positional arguments:
     filename              name of the cobol source file
