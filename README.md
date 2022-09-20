@@ -1,4 +1,4 @@
-# Utilities
+# clean-cobol.py
 
 clean-cobol.py (and verify-results.sh, a test driver for clean-cobol.py)
 
@@ -7,19 +7,15 @@ Copyright (c) 2022 UChin Kim
 
 ## SUMMARY
 
-To make it easier to maintain an existing COBOL code base going forwards,
-which uses the older style of terminating most statements with a '.',
-this script will convert the COBOL source code to use the more robust style,
-which is to use a single solitary '.' at the end of each paragraph (procedure),
-along with code block terminators. In order to make this feasible, it will
-heuristically insert block terminators (e.g. 'end-if', 'end-start',
-'end-search', etc) as needed, by examining the indent structure of the code,
-to ascertain where the block terminators should be inserted, if they are not
-already present.
-
-In addition, this script will also annotate select code block terminators,
-such as 'end-if', 'end-search', 'end-start', etc. to make it easier to
-visually identify the extents of each code block.
+*clean-cobol.py* is a filter program that converts sentence structured
+COBOL code into code block structured COBOL code, thus improving
+maintainability of existing COBOL code going forwards. It
+heuristically examines indent levels to figure out where code blocks
+start and end, inserting code block terminators (such as ‘end-if’,
+‘end-start’, ‘end-search’, etc), as needed. Also annotates code block
+terminators, to make it easier to visually identify the extents of each
+code block. Additionally, it can convert code to all lowercase or all
+uppercase, as per house coding requirements.
 
 ## CAVEATS
 
