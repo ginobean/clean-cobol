@@ -31,7 +31,7 @@ e.g. Here is an example of a BAD indent level change. Notice how there
 is ONLY a 1 space indentation change from the 'then' line to the
 'perform do-something' line.
 
-### Bad indent level example
+### Example of a "bad" indent level
 
 -----
     if flag-1 = 'Z'
