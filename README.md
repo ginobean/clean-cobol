@@ -12,7 +12,7 @@ COBOL code into code block structured COBOL code, thus improving
 maintainability of existing COBOL code going forwards. It
 heuristically examines indent levels to figure out where code blocks
 start and end, inserting code block terminators (such as ‘end-if’,
-‘end-start’, ‘end-search’, etc), as needed. Also annotates code block
+‘end-start’, ‘end-search’, etc), as needed. Also, annotates code block
 terminators, to make it easier to visually identify the extents of each
 code block. Additionally, it can convert code to all lowercase or all
 uppercase, as per house coding requirements.

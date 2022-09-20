@@ -1,2 +1,2 @@
-scripts/tests/test-set-1
-scripts/tests/*.current.*
+tests/test-set-1
+tests/*.current.*
