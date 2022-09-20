@@ -4,7 +4,7 @@ clean-cobol.py (and verify-results.sh, a test driver for clean-cobol.py)
 MIT License
 Copyright (c) 2022 UChin Kim
 
-SUMMARY:
+## SUMMARY:
 
 To make it easier to maintain an existing COBOL code base going forwards,
 which uses the older style of terminating most statements with a '.',
@@ -20,7 +20,7 @@ In addition, this script will also annotate select code block terminators,
 such as 'end-if', 'end-search', 'end-start', etc. to make it easier to
 visually identify the extents of each code block.
 
-CAVEATS:
+## CAVEATS:
 
 Note that your indent levels MUST BE ACCURATE, +/- a fudge factor
 of 1 space. This program determines the correct insertion points,
@@ -43,7 +43,38 @@ Bad indent level example:
     end-if
 -----
 
-DETAILS:
+Also, if you have 'next sentence' statements in your source code, it's probably
+a good idea to manually resolve it, possibly by replacing it with 'continue',
+'exit perform cycle', 'exit perform', 'exit paragraph', etc.,
+depending on what is contextually correct for the case at hand. COBOL source
+code containing 'next sentence' will generally NOT
+ work correctly, after being processed by my *clean-cobol.py* script, since
+'next sentence' implicitly assumes a paragraph is comprised of multiple
+sentences. Whereas, *clean-cobol.py* will convert each paragraph in the
+procedure division into a single sentence, comprised of one or more statements
+and/or code blocks.
+
+## HOW WELL DOES IT WORK?
+
+I tested my *clean-cobol,py* script on a couple dozen COBOL source code files,
+that I found on the Web, plus a number of examples from
+*Murach's Structured Cobol* (written by Mike Murach, Anne Prince,
+Raul Menendez). In general, it seemed to work pretty well.
+
+As a specific example, for listmods.cbl (from *Murach's Structured Cobol*),
+which was about 100K bytes in size, there were two lines containing
+the statement 'next sentence', which I manually changed to 'exit paragraph'.
+After running my *clean-cobol.py* script on listmods.cbl, the resulting
+compiled COBOL program generated exactly the same results as before (except
+for the report generation date/time field, which changes each time the
+report is regenerated).
+
+But, of course, be sure to do regression testing on the code, both
+before and after you run *clean-cobol.py*, to ensure that NO issues were
+introduced during the cleaning/filtering process.
+
+
+## DETAILS:
 
 In the 'procedure division' section, converts the COBOL source code to
 use the more robust style, which is to use a single solitary '.' at the end
@@ -203,13 +234,17 @@ After:
     perform proc-7
 ---
 
-IDEAL USE CASE:
+## IDEAL USE CASE:
 
 The ideal use case for this script, is when you are looking to maintain a
 COBOL code base which already has a regression test suite associated
 with it, to verify continued correct operation of the code.
 
-USAGE EXAMPLES:
+Once you've verified correctness, via regression testing, the resulting code,
+cleaned/filtered by *clean-cobol.py* should be notably easier to maintain
+going forwards.
+
+### USAGE EXAMPLES:
 
     # removes trailing dots, from each statement in procedure division.
     # inserts and annotates code block terminators.
