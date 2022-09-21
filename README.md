@@ -7,7 +7,7 @@ Copyright (c) 2022 UChin Kim
 
 ## SUMMARY
 
-*clean-cobol.py* is a filter program that converts sentence structured
+*clean-cobol.py* is a filter program that *refactors* sentence structured
 COBOL code into code block structured COBOL code, thus improving
 maintainability of existing COBOL code going forwards. It
 heuristically examines indent levels to figure out where code blocks
