@@ -5,6 +5,8 @@ clean-cobol.py (and verify-results.sh, a test driver for clean-cobol.py)
 MIT License
 Copyright (c) 2022 UChin Kim
 
+[recursive reference to this page](<https://github.com/ginobean/clean-cobol>)
+
 ## SUMMARY
 
 *clean-cobol.py* is a filter program that *refactors* sentence structured
@@ -289,4 +291,4 @@ going forwards.
 
 ## DONATE
 
-[![Donate](<./paypal-donate-button.png>)(<https://paypal.me/uchinkim>)
+[![Donate](<./paypal-donate-button.png>)](<https://paypal.me/uchinkim>)
