@@ -289,6 +289,10 @@ going forwards.
     -o OUTPUT_FILENAME, --output-filename OUTPUT_FILENAME
                             output to specified filename
 
-## DONATE
+-----
+
+## CONTACT ME / DONATE
 
 [![Donate](<./paypal-donate-button.png>)](<https://paypal.me/uchinkim>)
+
+-----
