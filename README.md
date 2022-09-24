@@ -286,3 +286,7 @@ going forwards.
     -d, --debug           enable verbose debugging output
     -o OUTPUT_FILENAME, --output-filename OUTPUT_FILENAME
                             output to specified filename
+
+## DONATE
+
+[![Donate](<./paypal-donate-button.png>)(<https://paypal.me/uchinkim>)
